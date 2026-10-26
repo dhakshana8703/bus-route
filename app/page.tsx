@@ -45,6 +45,20 @@ const stops = ["Bengaluru · Majestic Bus Stand", "Hosur · Attibele Toll", "Kri
 
 const steps = ["Search", "Journey", "Seats", "Passenger", "Review", "Payment"]
 
+function RouteSelect({ label, value, options, open, onToggle, onChange }: { label: string; value: string; options: string[]; open: boolean; onToggle: () => void; onChange: (value: string) => void }) {
+  return (
+    <label className="relative block">
+      <span className="mb-2 block text-xs font-bold uppercase tracking-[0.1em] text-[#7b8498]">{label}</span>
+      <button type="button" aria-haspopup="listbox" aria-expanded={open} onClick={onToggle} className="flex h-12 w-full items-center justify-between rounded-xl border border-[#dfe4ee] bg-white px-3 text-left text-sm font-normal text-[#182033] outline-none transition focus:border-[#e28b3d]">
+        <span>{value}</span><ChevronDown className={`size-4 text-[#8992a5] transition ${open ? "rotate-180" : ""}`} aria-hidden="true" />
+      </button>
+      {open && <div role="listbox" aria-label={`${label} city`} className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-20 overflow-hidden rounded-xl border border-[#dfe4ee] bg-white p-1.5 shadow-[0_14px_32px_rgba(13,20,38,0.18)]">
+        {options.map((option) => <button type="button" role="option" aria-selected={option === value} key={option} onClick={() => onChange(option)} className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-normal transition hover:bg-[#f5f6fa] ${option === value ? "bg-[#f5f6fa] text-[#1e2d5c]" : "text-[#182033]"}`}><span>{option}</span>{option === value && <Check className="size-4 text-[#e28b3d]" aria-hidden="true" />}</button>)}
+      </div>}
+    </label>
+  )
+}
+
 export default function Home() {
   const [origin, setOrigin] = useState("Bengaluru")
   const [destination, setDestination] = useState("Chennai")
@@ -57,6 +71,7 @@ export default function Home() {
   const [activeStep, setActiveStep] = useState(0)
   const [complete, setComplete] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [openRoute, setOpenRoute] = useState<"origin" | "destination" | null>(null)
   const [sort, setSort] = useState("Recommended")
   const [passengerName, setPassengerName] = useState("")
 
@@ -136,9 +151,9 @@ export default function Home() {
               <div className="absolute right-6 top-0 h-1 w-24 rounded-b-full bg-gradient-to-r from-[#a83d32] via-[#d9ad58] to-[#4b8a69]" />
               <div className="mb-6 flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.12em] text-[#d9ad58]">Plan your trip</p><h2 className="mt-1 text-xl font-bold tracking-[-0.03em]">Where are you going?</h2></div><span className="rounded-lg bg-[#2a2117] px-2.5 py-1 text-xs font-bold text-[#f0b65b]">Festive fares</span></div>
               <div className="relative grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
-                <label className="block"><span className="mb-2 block text-xs font-bold uppercase tracking-[0.1em] text-[#7b8498]">From</span><select value={origin} onChange={(e) => setOrigin(e.target.value)} className="h-12 w-full rounded-xl border border-[#dfe4ee] bg-white px-3 text-sm font-semibold outline-none focus:border-[#e28b3d]"><option>Bengaluru</option><option>Chennai</option><option>Coimbatore</option><option>Kochi</option><option>Hyderabad</option><option>Madurai</option></select></label>
+                <RouteSelect label="From" value={origin} options={routes.map((route) => route.city)} open={openRoute === "origin"} onToggle={() => setOpenRoute(openRoute === "origin" ? null : "origin")} onChange={(value) => { setOrigin(value); setOpenRoute(null) }} />
                 <button onClick={swapStations} className="mb-1 flex size-10 items-center justify-center rounded-full border border-[#dfe4ee] bg-white text-[#1e2d5c] shadow-sm hover:border-[#e28b3d]" aria-label="Swap origin and destination"><ArrowUpDown className="size-4" /></button>
-                <label className="block"><span className="mb-2 block text-xs font-bold uppercase tracking-[0.1em] text-[#7b8498]">To</span><select value={destination} onChange={(e) => setDestination(e.target.value)} className="h-12 w-full rounded-xl border border-[#dfe4ee] bg-white px-3 text-sm font-semibold outline-none focus:border-[#e28b3d]"><option>Chennai</option><option>Bengaluru</option><option>Coimbatore</option><option>Kochi</option><option>Hyderabad</option><option>Madurai</option></select></label>
+                <RouteSelect label="To" value={destination} options={routes.map((route) => route.city)} open={openRoute === "destination"} onToggle={() => setOpenRoute(openRoute === "destination" ? null : "destination")} onChange={(value) => { setDestination(value); setOpenRoute(null) }} />
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-3"><label><span className="mb-2 block text-xs font-bold uppercase tracking-[0.1em] text-[#7b8498]">Departure</span><div className="relative"><CalendarDays className="absolute left-3 top-3.5 size-4 text-[#8992a5]" /><input value={date} onChange={(e) => setDate(e.target.value)} className="h-12 w-full rounded-xl border border-[#dfe4ee] pl-10 pr-3 text-sm font-semibold outline-none focus:border-[#e28b3d]" /></div></label><label><span className="mb-2 block text-xs font-bold uppercase tracking-[0.1em] text-[#7b8498]">Passengers</span><div className="flex h-12 items-center justify-between rounded-xl border border-[#dfe4ee] px-3"><Users className="size-4 text-[#8992a5]" /><button onClick={() => setPassengers(Math.max(1, passengers - 1))} className="rounded p-1 hover:bg-[#f2f4f8]" aria-label="Decrease passengers"><Minus className="size-4" /></button><span className="text-sm font-semibold">{passengers}</span><button onClick={() => setPassengers(Math.min(6, passengers + 1))} className="rounded p-1 hover:bg-[#f2f4f8]" aria-label="Increase passengers"><Plus className="size-4" /></button></div></label><button onClick={startSearch} className="h-12 self-end rounded-xl bg-[#1e2d5c] px-5 text-sm font-bold text-white shadow-sm transition hover:bg-[#263a73]">Search journeys <ArrowRight className="ml-1 inline size-4" /></button></div>
               <p className="mt-4 flex items-center gap-2 text-xs text-[#8992a5]"><ShieldCheck className="size-3.5" /> No fees to search. Prices shown include standard taxes.</p>
