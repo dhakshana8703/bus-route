@@ -103,6 +103,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#f7f8fb] text-[#182033]">
+      <div className="flex items-center justify-center gap-2 bg-[#0b0b0d] px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.13em] text-[#f7c978]"><Sparkles className="size-3.5" aria-hidden="true" /> Festive season fares across South India <Sparkles className="size-3.5" aria-hidden="true" /></div>
       <header className="border-b border-[#e6e9f0] bg-white/95 backdrop-blur">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 lg:px-8">
           <a href="#top" className="flex items-center gap-3" aria-label="RouteFlow home">
@@ -145,7 +146,7 @@ export default function Home() {
       </section>
 
       {!searched && <section className="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-10" aria-label="South India travel highlight">
-        <div className="relative min-h-[230px] overflow-hidden rounded-2xl bg-[#17213c] shadow-[0_16px_40px_rgba(35,49,88,0.12)] sm:min-h-[280px]">
+        <div className="relative min-h-[230px] overflow-hidden rounded-2xl border border-[#d9ad58]/40 bg-[#0b0b0d] shadow-[0_16px_40px_rgba(11,11,13,0.18)] sm:min-h-[280px]">
           <img src="/south-india-bus.png" alt="Modern intercity bus ready to depart in South India" className="absolute inset-0 size-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#17213c]/95 via-[#17213c]/65 to-transparent" />
           <div className="relative flex min-h-[230px] max-w-xl flex-col justify-center p-6 text-white sm:min-h-[280px] sm:p-10">
