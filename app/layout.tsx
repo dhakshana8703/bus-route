@@ -3,8 +3,8 @@ import type { ReactNode } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "RouteFlow — Better routes, simpler journeys",
-  description: "Compare intercity rail journeys, choose your seat, and book with confidence.",
+  title: "RouteFlow — Bus journeys, made clearer",
+  description: "Compare demo intercity bus journeys, choose your seat, and complete a safe simulated booking.",
 }
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
