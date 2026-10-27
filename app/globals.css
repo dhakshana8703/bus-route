@@ -160,4 +160,20 @@
   body {
     @apply bg-background text-foreground;
   }
+  .label, .label-dark {
+    @apply mb-2 block text-xs font-bold uppercase tracking-[0.1em];
+  }
+  .label { color: #7b8498; }
+  .label-dark { color: #687087; }
+  .field, .field-light {
+    @apply h-12 w-full rounded-xl border px-3 text-sm font-semibold outline-none transition focus:border-[#e28b3d];
+  }
+  .field { @apply border-[#dfe4ee] bg-white text-[#182033]; }
+  .field-light { @apply border-[#dfe4ee] bg-white text-[#182033]; }
+  .muted { @apply text-xs font-bold uppercase tracking-[0.08em] text-[#8992a5]; }
+}
+
+@media print {
+  header, footer, #top, #results, #why-routeflow, #how-it-works, button { display: none !important; }
+  body { background: white; }
 }
